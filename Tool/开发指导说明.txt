@@ -1,0 +1,67 @@
+目录结构：
+
++ Base
+    + BaseButton.py
+    + BottomPanel.py
+    + MainWindow.py
+    + RightPanel.py
++ Part
+    + Script
+        + Machine
+            + Machine.py
+                + class Machine()
+        + Program
+            + Program.py
+                + class Program()
+        + ...
+            + ...
+                + ...
+    + Widget
+        + ProgramDisk
+            + ProgramDisk.py
+                + class ProgramDisk
+        + ProgramNc
+            + ProgramNc.py
+                + class ProgramNc
+        + ...
+            + ...
+                + ...
+    + autostart.py
+    + addon.py
+    + basebutton.py
+    + buttonfactory.py
++ Tool
+    + Methods
+        + ConfigController.py
+        + SmallTools.py
+    + Qss
+        + default.qss
+        + bluesky.qss
+        + ...
+    + Settings
+        + config.ini
+        + ...
+    + 开发指导说明.txt
+
+附加说明
+
+
+    Base中MainWindow为骨架，提供插孔(各种layout)，其中BaseButton为该项目中所有Button的基类（indicatorButton除外）
+BottomPanel提供底部页面，包含插孔（QStackedLayout），RightPanel提供右侧页面，包含插孔（QStackedLayout）。
+
+    Part中Script为个性化工件打磨中心，通过继承basebutton，并逐级继承，实现子类重用父类元素，达到代码重用，减少操作对软件
+可能会带来的负担。
+    其中__init__中顶级类（直接从basebutton继承过来的）只需要说明区域（self.area = xxx），而间接继承自basebutton
+的类，除需要说明区域（self.area = xxx）之外还需要额外给出工件的父页（self.basePanel = xxx），为方便开发，在页创建时，
+已经通过终端将所有的basePanel打印出来，挑选合适的basePanel，将按钮添加其上。除此之外，初始化方法__init__中可以提供各种
+通用性元素以便子类直接调用，这需要您自己来实现。
+    setupUi（self，button）可以为button设置属性
+    clickSlot（check） 填写按钮点击后需要触发的事件
+
+    widget提供软件中心的窗口们，即为button的操作对象，可以将此文件夹内的文件视为餐桌中的鱼肉，那么script中的button即为
+筷子刀叉等操作工具。
+    另外dialog需在widget中实例化，以便qss对其生效。可以在与文件夹同名的py文件之外有dialog的ui文件。
+    通俗的讲，可以将widget中与文件夹同名文件视为一个插盘，任何类或对象都可以在它的文件夹之外操作，但最后都必须插在插槽上。
+
+    autostart为启动文件
+    addon为组装中心，它将遍历Script和Widget文件夹，以实例
